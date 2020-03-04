@@ -7,7 +7,7 @@ import okhttp3.*;
 import org.springframework.stereotype.Component;
 
 /**
- * 使用okhttp获取github的AccessToken
+ * 使用okhttp获取github的AccessToken,已经user
  */
 
 @Component

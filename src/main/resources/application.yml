@@ -5,3 +5,10 @@ spring:
   thymeleaf:
     cache: false   #禁用缓存，然后你修改模板引擎页面直接按ctrl +f9 编译一下就可以了，不用重启服务器
 
+# 使用value注解将那些信息转移到yml文件上，这样就可以根据生产环境来改变这些值
+github:
+  client:
+    id: Iv1.204d1e68c2dee37b
+    secret: 3e6593cc07555d40492a0a628e32028f47ab13bf
+  redirect:
+    uri: http://localhost:8887/callback
