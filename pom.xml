@@ -32,7 +32,19 @@
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
 
+        <!--引入jqueryd的webjar，访问路径如localhost:8082/webjars/jquery/3.3.1/jquery.js-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>jquery</artifactId>
+            <version>3.3.1</version>
+        </dependency>
 
+        <!--引入bootstrap的webjar-->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.0.0</version>
+        </dependency>
 
 
         <!--热部署-->
