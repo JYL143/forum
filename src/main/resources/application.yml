@@ -1,0 +1,7 @@
+server:
+  port: 8887
+
+spring:
+  thymeleaf:
+    cache: false   #禁用缓存，然后你修改模板引擎页面直接按ctrl +f9 编译一下就可以了，不用重启服务器
+
