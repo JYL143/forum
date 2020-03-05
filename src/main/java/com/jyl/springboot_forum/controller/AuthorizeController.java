@@ -2,12 +2,19 @@ package com.jyl.springboot_forum.controller;
 
 import com.jyl.springboot_forum.dto.AccessTokenDTO;
 import com.jyl.springboot_forum.dto.GithubUser;
+import com.jyl.springboot_forum.mapper.UserMapper;
+import com.jyl.springboot_forum.model.User;
 import com.jyl.springboot_forum.provider.GithubProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.util.UUID;
 
 @Controller
 public class AuthorizeController {
@@ -25,6 +32,9 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
+    @Autowired
+    private UserMapper userMapper;
+
 
     /**
      * 授权登录返回的方法
@@ -35,7 +45,10 @@ public class AuthorizeController {
      * @return
      */
     @GetMapping("/callback")
-    public String callback(@RequestParam(name = "code")String code,@RequestParam(name = "state")String state){
+    public String callback(@RequestParam(name = "code")String code,
+                           @RequestParam(name = "state")String state,
+                           HttpSession session,
+                           HttpServletResponse response){
 
         AccessTokenDTO accessTokenDTO=new AccessTokenDTO();
         accessTokenDTO.setClient_id(clientId);
@@ -45,9 +58,27 @@ public class AuthorizeController {
         accessTokenDTO.setState(state);
 
         String accessToken=githubProvider.getAccessToken(accessTokenDTO);//用code和state来获取access_token
-        GithubUser user=githubProvider.getUser(accessToken);  //在用获取的access_token来获取user信息
-         System.out.println(user);
+        GithubUser githubUser=githubProvider.getUser(accessToken);  //在用获取的access_token来获取user信息
 
-        return "index";
+        if (githubUser!=null){ //返回的user信息不为空就说明是登录成功
+
+            User user=new User();
+            String token=UUID.randomUUID().toString();
+
+            user.setToken(token); //使用uuid当token,来当持久化状态id
+            user.setName(githubUser.getName());
+            user.setAccountId(String.valueOf(githubUser.getId()));
+            user.setGmtCreate(System.currentTimeMillis());//使用当前的毫秒数
+            user.setGmtModified(user.getGmtCreate());
+            userMapper.insert(user);    //将登录信息写到数据库，在利用cookie，来做持久化登录状态
+
+            response.addCookie(new Cookie("token",token));
+
+            return "redirect:/";//重定向到主页面方法 会改变url
+        }else{ //登录失败
+            return "redirect:/";
+        }
+
+
     }
 }
