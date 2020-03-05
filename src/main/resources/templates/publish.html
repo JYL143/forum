@@ -5,13 +5,14 @@
     <title>发布--云米社区</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet"href="css/bootstrap-theme.css">
+    <link rel="stylesheet"href="css/community.css">
     <script src="js/bootstrap.min.js" type="application/javascript"></script>
 </head>
-<body>
+<body >
 
-<nav class="navbar navbar-default">
+
     <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
+
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">云米社区</span>
@@ -22,7 +23,7 @@
             <a class="navbar-brand" href="#">云米社区</a>
         </div>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
+
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 
             <form class="navbar-form navbar-left">
@@ -33,6 +34,9 @@
             </form>
             <ul class="nav navbar-nav navbar-right">
 
+                <li th:if="${session.user !=null}">
+                    <a href="/publish">发布</a>
+                </li>
                 <li class="dropdown" th:if="${session.user!=null}">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true" aria-expanded="false"th:text="${session.user.getName()}"> <span class="caret"></span></a>
@@ -49,13 +53,52 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="container-fluid main">
         <div class="row">
-            <div class="col-lg-9 col-md-12 col-sm12 col-xs-12" style="background-color: red;height: 300px" ></div>
-            <div class="col-lg-3 col-md-12 col-sm12 col-xs-12" style="background-color: green;height: 300px"></div>
+            <div class="col-lg-9 col-md-12 col-sm12 col-xs-12" >
+                <h2><span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 发起</h2>
+                <hr>
+
+                <form action="/publish" method="post">
+
+                    <div class="form-group">
+                        <label for="title">问题标题（简单扼要）:</label>
+                        <input type="text"  th:value="${title}" class="form-control" id="title" name="title" placeholder="问题标题……">
+                    </div>
+                    <div class="form-group">
+                        <label for="description">问题补充 (必填，请参照右侧提示):</label>
+                        <textarea name="description" th:text="${description}" id="description" class="form-control" cols="30" rows="10"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tag">添加标签:</label>
+                        <input type="text" class="form-control"  th:value="${tag}"id="tag" name="tag" placeholder="输入标签，以，号分隔">
+
+                    </div>
+                    <div class="container-fluid main ">
+                        <div class="row">
+                            <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                                <div class="alert alert-danger col-lg-12 col-md-12 col-sm-12 col-xs-12" th:text="${error}" th:if="${error != null}">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
+                                <button type="submit" class="btn btn-success btn-publish ">发布</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="col-lg-3 col-md-12 col-sm12 col-xs-12">
+                <h3>问题发起指南</h3>
+                • 问题标题: 请用精简的语言描述您发布的问题，不超过25字 <br>
+                • 问题补充: 详细补充您的问题内容，并确保问题描述清晰直观, 并提供一些相关的资料<br>
+                • 选择标签: 选择一个或者多个合适的标签，用逗号隔开，每个标签不超过10个字<br>
+            </div>
         </div>
     </div>
-</nav>
+
 
 </body>
 </html>

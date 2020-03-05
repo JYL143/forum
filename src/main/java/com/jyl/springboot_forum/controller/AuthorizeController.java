@@ -60,7 +60,7 @@ public class AuthorizeController {
         String accessToken=githubProvider.getAccessToken(accessTokenDTO);//用code和state来获取access_token
         GithubUser githubUser=githubProvider.getUser(accessToken);  //在用获取的access_token来获取user信息
 
-        if (githubUser!=null){ //返回的user信息不为空就说明是登录成功
+        if (githubUser!=null && githubUser.getId() !=null){ //返回的user信息不为空就说明是登录成功
 
             User user=new User();
             String token=UUID.randomUUID().toString();
@@ -70,6 +70,9 @@ public class AuthorizeController {
             user.setAccountId(String.valueOf(githubUser.getId()));
             user.setGmtCreate(System.currentTimeMillis());//使用当前的毫秒数
             user.setGmtModified(user.getGmtCreate());
+            user.setBio(githubUser.getBio());
+            user.setAvatarUrl(githubUser.getAvatarUrl()); //获取github的头像url
+
             userMapper.insert(user);    //将登录信息写到数据库，在利用cookie，来做持久化登录状态
 
             response.addCookie(new Cookie("token",token));

@@ -4,10 +4,9 @@ import com.jyl.springboot_forum.mapper.UserMapper;
 import com.jyl.springboot_forum.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +29,7 @@ public class IndexController {
 
         //获取cookie，如果cokkie里有token，就获取该cookie的token，然后根据token查询表里的user信息
         Cookie[] cookies=request.getCookies();
+        if (cookies !=null && cookies.length!=0){
         for (Cookie cookie:cookies){
             if (cookie.getName()!=null && cookie.getName().equals("token")){
                 String token=cookie.getValue();
@@ -40,7 +40,7 @@ public class IndexController {
                 break;
             }
         }
-
+        }
         return "index";
     }
 
