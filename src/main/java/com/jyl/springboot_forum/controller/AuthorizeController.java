@@ -64,7 +64,6 @@ public class AuthorizeController {
 
             User user=new User();
             String token=UUID.randomUUID().toString();
-
             user.setToken(token); //使用uuid当token,来当持久化状态id
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
@@ -72,7 +71,6 @@ public class AuthorizeController {
             user.setGmtModified(user.getGmtCreate());
             user.setBio(githubUser.getBio());
             user.setAvatarUrl(githubUser.getAvatarUrl()); //获取github的头像url
-
             userMapper.insert(user);    //将登录信息写到数据库，在利用cookie，来做持久化登录状态
 
             response.addCookie(new Cookie("token",token));

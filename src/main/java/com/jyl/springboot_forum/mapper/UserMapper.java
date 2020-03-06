@@ -10,10 +10,11 @@ import org.apache.ibatis.annotations.Select;
 public interface UserMapper {
 
     //点击登录，登录成功添加user信息
-    @Insert("insert into user(name,account_id,token,gmt_create,gmt_modified,bio,avatar_url) values (#{name},#{accountId},#{token},#{gmtCreate},#{gmtModified},#{bio},#{avatarUrl})")
      void insert(User user); //默认public不用加
 
     //查询token
-    @Select("select * from user where token = #{token}")
     User findByToken(@Param("token") String token);
+
+    //查询question里的关联id字段与user表的id相同的user信息
+    User findByid(@Param("id")Integer id);  //传进来的id是question表的caret关联字段
 }

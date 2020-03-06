@@ -83,15 +83,13 @@ public class PublishController {
             return  "publish";
         }
 
-
         Question question = new Question();
         question.setTitle(title);
         question.setDescription(description);
         question.setTag(tag);
-        question.setCreator(user.getId());
+        question.setCreator(user.getId()); //关联user表的id值，多表查询用
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
-
 
         questionMapper.create(question);
         return "redirect:/";

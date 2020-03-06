@@ -13,11 +13,18 @@ spring:
   thymeleaf:
     cache: false   #禁用缓存，然后你修改模板引擎页面直接按ctrl +f9 编译一下就可以了，不用重启服务器
   datasource:
-    url: jdbc:mysql://localhost:3306/springboot_forum?serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/springboot_forum?serverTimezone=UTC&useSSL=false
     username: root
     password: 565649
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-
+#-----------------------------------------------------整合mybatis配置文件版 ----------------------------------------------------------------
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml  # 指定sql映射文件位置
+  type-aliases-package: com.jyl.springboot_forum.model #类型别名
+  configuration:
+    map-underscore-to-camel-case: true #开启驼峰命名法
+    # 指定全局配置文件位置
+    # config-location: classpath:mybatis/mybatis-config.xml
 
 

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jyl.springboot_forum.mapper.QuestionMapper">
+
+    <!--有外键的用map-->
+    <resultMap id="QuestionMap" type="question">
+        <id property="id" column="id"/>
+        <result property="title" column="title"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="gmtModified" column="gmt_modified"></result>
+        <result property="creator" column="creator"></result>
+        <result property="commentCount" column="comment_count"></result>
+        <result property="viewCount" column="view_count"></result>
+        <result property="likeCount" column="like_count"></result>
+        <result property="tag" column="tag"></result>
+        <result property="description" column="description"></result>
+        <!-- 多对一的关系映射用association标签 就是该xml对应的实体类是1
+         property是那个封装实体类的属性名  javaType封装到哪个对象 column是数据名-->
+        <association property="user"  javaType="com.jyl.springboot_forum.model.User">
+            <id property="id" column="id"></id>
+            <result property="avatarUrl" column="avatar_url"></result>
+        </association>
+
+    </resultMap>
+    <!--发布文章-->
+    <insert id="create" parameterType="question">
+      insert into question(title,description,gmt_create,gmt_modified,creator,tag) values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})
+    </insert>
+
+    <!--查询文章列表-->
+    <select id="list" resultMap="QuestionMap">
+           select * from question
+           left join user on user.id=question.creator
+    </select>
+
+</mapper>
