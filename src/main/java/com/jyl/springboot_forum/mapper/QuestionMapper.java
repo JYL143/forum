@@ -17,5 +17,6 @@ public interface QuestionMapper {
     //查询文章列表
     List<Question> list();
 
-
+    //查询指定用户发布的文章列表
+    List<Question> list2(Integer id);
 }

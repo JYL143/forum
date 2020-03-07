@@ -33,4 +33,10 @@
            left join user on user.id=question.creator
     </select>
 
+    <!--查询指定用户发布的文章列表-->
+    <select id="list2" resultMap="QuestionMap" parameterType="int">
+           select * from question
+           left join user on user.id=question.creator
+           where creator=#{id}
+    </select>
 </mapper>

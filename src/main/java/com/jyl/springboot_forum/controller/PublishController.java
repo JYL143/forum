@@ -2,7 +2,7 @@ package com.jyl.springboot_forum.controller;
 
 
 import com.jyl.springboot_forum.mapper.QuestionMapper;
-import com.jyl.springboot_forum.mapper.UserMapper;
+
 import com.jyl.springboot_forum.model.Question;
 import com.jyl.springboot_forum.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +27,6 @@ public class PublishController {
     @Autowired
     private QuestionMapper questionMapper;
 
-    @Autowired
-    private UserMapper userMapper;
 
 
     @GetMapping("/publish")
@@ -63,21 +61,7 @@ public class PublishController {
             return "publish";
         }
 
-        //判断是否是登录用户，如果不是就提示错误信息
-        User user=null;
-        Cookie[] cookies=request.getCookies();
-        if (cookies !=null && cookies.length!=0) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName() != null && cookie.getName().equals("token")) {
-                    String token = cookie.getValue();
-                    user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
-                    }
-                    break;
-                }
-            }
-        }
+        User user = (User) request.getSession().getAttribute("user");
         if (user==null){
             model.addAttribute("error","用户未登录");
             return  "publish";
