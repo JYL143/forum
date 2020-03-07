@@ -5,6 +5,7 @@ import com.jyl.springboot_forum.dto.GithubUser;
 import com.jyl.springboot_forum.mapper.UserMapper;
 import com.jyl.springboot_forum.model.User;
 import com.jyl.springboot_forum.provider.GithubProvider;
+import com.jyl.springboot_forum.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.UUID;
@@ -33,8 +35,10 @@ public class AuthorizeController {
     private String redirectUri;
 
     @Autowired
-    private UserMapper userMapper;
+    private UserService userService;
 
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 授权登录返回的方法
@@ -67,11 +71,12 @@ public class AuthorizeController {
             user.setToken(token); //使用uuid当token,来当持久化状态id
             user.setName(githubUser.getName());
             user.setAccountId(String.valueOf(githubUser.getId()));
-            user.setGmtCreate(System.currentTimeMillis());//使用当前的毫秒数
+            user.setGmtCreate(System.currentTimeMillis());
             user.setGmtModified(user.getGmtCreate());
             user.setBio(githubUser.getBio());
             user.setAvatarUrl(githubUser.getAvatarUrl()); //获取github的头像url
-            userMapper.insert(user);    //将登录信息写到数据库，在利用cookie，来做持久化登录状态
+//            userService.createOrUpdate(user); //判断要更新还是插入用户信息
+           userMapper.insert(user);    //将登录信息写到数据库，在利用cookie，来做持久化登录状态
 
             response.addCookie(new Cookie("token",token));
 
@@ -81,5 +86,16 @@ public class AuthorizeController {
         }
 
 
+    }
+
+    //退出登录
+    @GetMapping("/logout")
+    public String logout(HttpServletRequest request,
+                         HttpServletResponse response) {
+        request.getSession().removeAttribute("user");
+        Cookie cookie = new Cookie("token", null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+        return "redirect:/";
     }
 }

@@ -19,4 +19,7 @@ public interface QuestionMapper {
 
     //查询指定用户发布的文章列表
     List<Question> list2(Integer id);
+
+    //查询指定id的单个问题详情
+    Question getById(Integer id);
 }

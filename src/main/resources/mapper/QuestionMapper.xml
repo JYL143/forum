@@ -18,6 +18,12 @@
          property是那个封装实体类的属性名  javaType封装到哪个对象 column是数据名-->
         <association property="user"  javaType="com.jyl.springboot_forum.model.User">
             <id property="id" column="id"></id>
+            <result property="name" column="name"></result>
+            <result property="token" column="token"></result>
+            <result property="accountId" column="account_id"></result>
+            <result property="gmtCreate" column="gmt_create"></result>
+            <result property="gmtModified" column="gmt_modified"></result>
+            <result property="bio" column="bio"></result>
             <result property="avatarUrl" column="avatar_url"></result>
         </association>
 
@@ -39,4 +45,12 @@
            left join user on user.id=question.creator
            where creator=#{id}
     </select>
+
+    <!--查询指定id的单个问题详情-->
+    <select id="getById" resultMap="QuestionMap" parameterType="int">
+           select * from question
+           left join user on user.id=question.creator
+           where question.id=#{id}
+    </select>
+
 </mapper>

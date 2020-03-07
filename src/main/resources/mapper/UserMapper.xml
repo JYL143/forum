@@ -16,4 +16,16 @@
     <select id="findByid" parameterType="int" resultType="user">
       select * from user where id = #{id}
     </select>
+
+    <!--根据accountid看是否存在这个用户-->
+    <select id="findByAccountId" parameterType="string" resultType="user">
+      select * from user where account_id = #{accountId}
+    </select>
+
+    <!-- 更新用户-->
+    <update id="update" parameterType="user">
+        update user set name=#{name},token=#{token},gmt_modified=#{gmtModified},avatar_url=#{avatarUrl} where  id=#{id}
+    </update>
+
+
 </mapper>
