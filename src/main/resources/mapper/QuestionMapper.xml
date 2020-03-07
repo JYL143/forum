@@ -53,4 +53,10 @@
            where question.id=#{id}
     </select>
 
+    <!-- 更新问题-->
+    <update id="update" parameterType="question">
+        update question set title=#{title},description=#{description},gmt_create=#{gmtCreate},gmt_modified=#{gmtModified},creator=#{creator},tag=#{tag}
+         where  id=#{id}
+    </update>
+
 </mapper>

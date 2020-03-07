@@ -22,4 +22,7 @@ public interface QuestionMapper {
 
     //查询指定id的单个问题详情
     Question getById(Integer id);
+
+    //更新问题
+    void update(Question question);
 }

@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <title>发布--云米社区</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <link rel="stylesheet"href="css/bootstrap-theme.css">
-    <link rel="stylesheet"href="css/community.css">
-    <script src="js/jquery-3.4.1.min.js" ></script>
-    <script src="js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet"href="/css/bootstrap-theme.css">
+    <link rel="stylesheet"href="/css/community.css">
+    <script src="/js/jquery-3.4.1.min.js" ></script>
+    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
 </head>
 <body >
 
@@ -21,7 +21,7 @@
                 <hr>
 
                 <form action="/publish" method="post">
-
+                    <input type="hidden" name="id" th:value="${id}">
                     <div class="form-group">
                         <label for="title">问题标题（简单扼要）:</label>
                         <input type="text"  th:value="${title}" class="form-control" id="title" name="title" placeholder="问题标题……">

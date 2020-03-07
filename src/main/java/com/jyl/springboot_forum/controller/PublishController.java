@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,19 +28,32 @@ public class PublishController {
     @Autowired
     private QuestionMapper questionMapper;
 
-
-
-    @GetMapping("/publish")
-    public String publish() {
+    //编辑问题方法
+    @GetMapping("/publish/{id}")
+    public String edit(@PathVariable(name = "id") Integer id,
+                       Model model) {
+        Question question = questionMapper.getById(id);  //查询原来的问题信息
+        model.addAttribute("title", question.getTitle());
+        model.addAttribute("description", question.getDescription());
+        model.addAttribute("tag", question.getTag());
+        model.addAttribute("id", question.getId());  //查出id然后放到隐藏域里 然后点击发布问题就根据有没有id来做添加问题还是更新问题
 
         return "publish";
     }
 
+    @GetMapping("/publish")
+    public String publish() {
+        return "publish";
+    }
+
+
+    //发布问题
     @PostMapping("/publish")
     public String doPublish(
             @RequestParam("title")String title,
             @RequestParam("description")String description,
             @RequestParam("tag")String tag,
+            @RequestParam("id")Integer id, //根据有没有id来做添加问题还是更新问题
             HttpServletRequest request,
             Model model){
 
@@ -75,7 +89,13 @@ public class PublishController {
         question.setGmtCreate(System.currentTimeMillis());
         question.setGmtModified(question.getGmtCreate());
 
-        questionMapper.create(question);
+        if (id==null){  //添加操作
+            questionMapper.create(question);
+        }else {  //更新操作
+            question.setId(id);
+            questionMapper.update(question);
+        }
+
         return "redirect:/";
 
 

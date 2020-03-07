@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class Question {
 
-    private Long id;
+    private Integer id;
     private String title;           //标题
     private Long gmtCreate;         //发布时间毫秒数
     private Long gmtModified;       //修改时间毫秒数
