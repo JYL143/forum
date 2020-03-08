@@ -19,11 +19,14 @@ public class QuestionController {
     @Autowired
     private QuestionMapper questionMapper;
 
+    //查看问题详情  加浏览数
     @GetMapping("/question/{id}")
     public String question(@PathVariable(name = "id") Integer id, Model model) {
 
+        questionMapper.addviewCount(id); //增加阅读数
         Question question=questionMapper.getById(id);
         model.addAttribute("question",question);
+
         return "question";
     }
 }

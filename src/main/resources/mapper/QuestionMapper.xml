@@ -59,4 +59,10 @@
          where  id=#{id}
     </update>
 
+    <!-- 增加阅读数-->
+    <update id="addviewCount" parameterType="int">
+        update question set view_count = view_count+1
+         where  id=#{id}
+    </update>
+
 </mapper>

@@ -1,12 +1,12 @@
 package com.jyl.springboot_forum.mapper;
 
 import com.jyl.springboot_forum.model.User;
-import org.apache.ibatis.annotations.Insert;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
 
-@Mapper
+
+
 public interface UserMapper {
 
     //点击登录，登录成功添加user信息
