@@ -2,11 +2,8 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${question.title}"></title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet"href="/css/bootstrap-theme.css">
-    <link rel="stylesheet"href="/css/community.css" >
-    <script src="/js/jquery-3.4.1.min.js" ></script>
-    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+        <head th:insert="~{import :: head}"></head>
+        <head th:insert="~{import :: markdown}"></head>
 </head>
 <body>
 
@@ -26,17 +23,17 @@
             </span>
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top-header"
-                     th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('HEADER'))}"
-                     th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('HEADER')}">
-                    <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"
-                       style="color: #A00;font-weight: bold;"></a>
-                    <img src="/images/hot.png"/>
-                </div>
+<!--                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 top-header"-->
+<!--                     th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('HEADER'))}"-->
+<!--                     th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('HEADER')}">-->
+<!--                    <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"-->
+<!--                       style="color: #A00;font-weight: bold;"></a>-->
+<!--                    <img src="/images/hot.png"/>-->
+<!--                </div>-->
 
                 <!--内容-->
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" id="question-view">
-                    <textarea style="display:none;" th:text="${question.description}"></textarea>
+                    <span th:text="${question.description}"></span>
                 </div>
                 <script type="text/javascript">
                     $(function () {
@@ -44,26 +41,26 @@
                     });
                 </script>
 
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"
-                     th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}"
-                     th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('FOOTER')}">
-                    <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"
-                       style="color: #A00;font-weight: bold;"></a>
-                </div>
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width: 100%;"
-                     th:if="${#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}">
-                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                    <!-- 页尾广告 -->
-                    <ins class="adsbygoogle"
-                         style="display:block"
-                         data-ad-client="ca-pub-9804684553882114"
-                         data-ad-slot="4772323686"
-                         data-ad-format="auto"
-                         data-full-width-responsive="true"></ins>
-                    <script>
-                        (adsbygoogle = window.adsbygoogle || []).push({});
-                    </script>
-                </div>
+<!--                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12"-->
+<!--                     th:if="${!#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}"-->
+<!--                     th:each="ad : ${#httpServletRequest.getServletContext().getAttribute('FOOTER')}">-->
+<!--                    <a th:href="${ad.url}" th:text="${ad.title}" target="_blank"-->
+<!--                       style="color: #A00;font-weight: bold;"></a>-->
+<!--                </div>-->
+<!--                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="width: 100%;"-->
+<!--                     th:if="${#lists.isEmpty(#httpServletRequest.getServletContext().getAttribute('FOOTER'))}">-->
+<!--                    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>-->
+<!--                    &lt;!&ndash; 页尾广告 &ndash;&gt;-->
+<!--                    <ins class="adsbygoogle"-->
+<!--                         style="display:block"-->
+<!--                         data-ad-client="ca-pub-9804684553882114"-->
+<!--                         data-ad-slot="4772323686"-->
+<!--                         data-ad-format="auto"-->
+<!--                         data-full-width-responsive="true"></ins>-->
+<!--                    <script>-->
+<!--                        (adsbygoogle = window.adsbygoogle || []).push({});-->
+<!--                    </script>-->
+<!--                </div>-->
 
                 <!--标签-->
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -105,26 +102,29 @@
                             </h5>
                             <div th:text="${comment.content}"></div>
                             <div class="menu">
-                                <span class="glyphicon glyphicon-thumbs-up icon"></span>
-                                <span th:data-id="${comment.id}"
-                                      onclick="collapseComments(this)" class="comment-icon">
+                                  <span  class="comment-icon">
+                                    <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                    <span th:text="${comment.likeCount}"></span>
+                                </span>
+
+                                <span th:data-id="${comment.id}" onclick="collapseComments(this)" class="comment-icon" style="margin-left: 4px">
                                     <span class="glyphicon glyphicon-comment"></span>
                                     <span th:text="${comment.commentCount}"></span>
                                 </span>
                                 <span class="pull-right"
-                                      th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd')}"></span>
+                                      th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd  HH:mm')}"></span>
                             </div>
                             <!--二级评论-->
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
-                                 th:id="${'comment-'+comment.id}">
-                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                    <input type="text" class="form-control" placeholder="评论一下……"
-                                           th:id="${'input-'+comment.id}">
-                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
-                                            th:data-id="${comment.id}">评论
-                                    </button>
-                                </div>
-                            </div>
+<!--                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"-->
+<!--                                 th:id="${'comment-'+comment.id}">-->
+<!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
+<!--                                    <input type="text" class="form-control" placeholder="评论一下……"-->
+<!--                                           th:id="${'input-'+comment.id}">-->
+<!--                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"-->
+<!--                                            th:data-id="${comment.id}">评论-->
+<!--                                    </button>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -160,10 +160,75 @@
 
         <!--右边信息块-->
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12">
-
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>发起人</h4>
+                <div class="media">
+                    <div class="media-left">
+                        <a href="#">
+                            <img class="media-object img-rounded"
+                                 th:src="${question.user.avatarUrl}">
+                        </a>
+                    </div>
+                    <div class="media-body">
+                        <h5 class="media-heading">
+                            <span th:text="${question.user.name}"></span>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+            <div th:insert="~{notice :: notice}"></div>
+<!--            <div th:insert="~{side :: side}"></div>-->
+            <!--相关问题-->
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <h4>相关问题</h4>
+<!--                <ul class="question-related">-->
+<!--                    <li th:each="related : ${relatedQuestions}">-->
+<!--                        <a th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+            </div>
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
+<script>
+    /**
+     * 提交回复
+     */
+    function post() {
+        var questionId = $("#question_id").val();       //获取问题id
+        var content = $("#comment_content").val();      //获取回复内容
+        comment2target(questionId, 1, content);
+    }
 
+    function comment2target(targetId, type, content) {
+        if (!content) {
+            alert("不能回复空内容~~~");
+            return;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/comment",
+            contentType: 'application/json',
+            data: JSON.stringify({
+                "parentId": targetId,
+                "content": content,
+                "type": type
+            }),
+            dataType: "json",
+            success: function (response) {
+                if (response.code == 200) {
+                    window.location.reload();
+                } else {
+                    alert("未登录，不能回复，请先登录！")
+                }
+
+            }
+
+        });
+    }
+</script>
 </body>
 </html>

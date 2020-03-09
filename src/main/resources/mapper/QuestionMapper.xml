@@ -26,8 +26,8 @@
             <result property="bio" column="bio"></result>
             <result property="avatarUrl" column="avatar_url"></result>
         </association>
-
     </resultMap>
+
     <!--发布文章-->
     <insert id="create" parameterType="question">
       insert into question(title,description,gmt_create,gmt_modified,creator,tag) values(#{title},#{description},#{gmtCreate},#{gmtModified},#{creator},#{tag})
@@ -65,4 +65,9 @@
          where  id=#{id}
     </update>
 
+    <!-- 增加阅读数-->
+    <update id="addCommentCount" parameterType="long">
+        update question set comment_count = comment_count+1
+         where  id=#{parentId}
+    </update>
 </mapper>

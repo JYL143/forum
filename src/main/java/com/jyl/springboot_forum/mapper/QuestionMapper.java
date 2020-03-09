@@ -26,4 +26,7 @@ public interface QuestionMapper {
 
     //增加阅读数
     void addviewCount(Integer id);
+
+    //增加回复数
+    void addCommentCount(Long parentId);
 }

@@ -12,7 +12,7 @@ public class Question {
     private Integer creator;        //关联user表的id值，多表查询用
     private Integer commentCount;   //回复数
     private Integer viewCount;      //浏览数
-    private Integer likeCount;
+    private Integer likeCount;      //点赞数
     private String tag;             //问题标签
     private String description;     //问题补充
 

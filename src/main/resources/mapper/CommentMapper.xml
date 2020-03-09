@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jyl.springboot_forum.mapper.CommentMapper">
+
+    <!--有外键的用map-->
+    <resultMap id="CommentMap" type="comment">
+        <id property="id" column="id"/>
+        <result property="parentId" column="parent_id"></result>
+        <result property="gmtCreate" column="gmt_create"></result>
+        <result property="gmtModified" column="gmt_modified"></result>
+        <result property="type" column="type"></result>
+        <result property="commentator" column="commentator"></result>
+        <result property="likeCount" column="like_count"></result>
+        <result property="content" column="content"></result>
+        <result property="commentCount" column="comment_count"></result>
+        <!-- 多对一的关系映射用association标签 就是该xml对应的实体类是1
+         property是那个封装实体类的属性名  javaType封装到哪个对象 column是数据名-->
+        <association property="user"  javaType="com.jyl.springboot_forum.model.User">
+            <id property="id" column="id"></id>
+            <result property="name" column="name"></result>
+            <result property="token" column="token"></result>
+            <result property="accountId" column="account_id"></result>
+            <result property="gmtCreate" column="gmt_create"></result>
+            <result property="gmtModified" column="gmt_modified"></result>
+            <result property="bio" column="bio"></result>
+            <result property="avatarUrl" column="avatar_url"></result>
+        </association>
+
+    </resultMap>
+    <!--点击登录，登录成功添加user信息-->
+    <insert id="insert" parameterType="comment">
+      insert into comment(parent_id,type,commentator,gmt_create,gmt_modified,like_count,content)
+       values (#{parentId},#{type},#{commentator},#{gmtCreate},#{gmtModified},#{likeCount},#{content})
+    </insert>
+
+    <!--查询一级回复列表  按时间倒序-->
+    <select id="listByTargetId1" resultMap="CommentMap" parameterType="long">
+           select * from comment
+           left join user on user.id=comment.commentator
+           where parent_id=#{id}
+           group by comment.gmt_create  desc
+    </select>
+
+
+</mapper>
