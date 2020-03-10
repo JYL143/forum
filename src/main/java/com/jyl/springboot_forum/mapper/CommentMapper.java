@@ -12,4 +12,10 @@ public interface CommentMapper {
 
     //查询一级回复
     List<Comment> listByTargetId1(Long id);
+
+    //二级评论后 给一级评论添加回复
+    void addCommentCount(Long parentId);
+
+    //增加点赞数
+    void addlike(Long parentId);
 }

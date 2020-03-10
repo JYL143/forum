@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>云米社区</title>
+    <title >云米社区</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet"href="/css/bootstrap-theme.css">
     <link rel="stylesheet"href="/css/community.css" >
@@ -16,7 +16,7 @@
 <div class="container-fluid main">
     <div class="row">
         <div class="col-lg-9 col-md-12 col-sm12 col-xs-12" >
-            <h2><span class="glyphicon glyphicon-list" aria-hidden="true"></span> &nbsp;发现</h2>
+            <h2><span class="glyphicon glyphicon-list" aria-hidden="true" th:text="' 当前问题标签:'+${tag1}"></span></h2>
             <hr>
             <div class="media" th:each="pageinfo:${pageinfo.list}">
                 <div class="media-left">
@@ -41,9 +41,9 @@
 
                     <!-- 是否有上一页，没有就显示禁用状态-->
 
-                    <li th:class="${!pageinfo.hasPreviousPage}?'disabled' :''"><a href="/">首页</a></li>
+                    <li th:class="${!pageinfo.hasPreviousPage}?'disabled' :''" ><a th:href="@{/(tag=${tag1})}">首页</a></li>
                     <li th:class="${!pageinfo.hasPreviousPage}?'disabled' :''">
-                        <a href="#" aria-label="Previous" th:href="@{/(pn=${(pageinfo.pageNum)-1}) }">
+                        <a href="#" aria-label="Previous" th:href="@{/(pn=${(pageinfo.pageNum)-1},tag=${tag1}) }">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
@@ -51,13 +51,13 @@
                     <!-- 这里就是判断当前循环读出的页码是不是你查询的页码，是就高亮，不是就不高亮，然后点击页码跳转查询该页面  -->
                     <li th:each="page_Num:${pageinfo.navigatepageNums}"  th:class="${page_Num==pageinfo.pageNum}?'active' :''">
                         <a href="#" th:text="${page_Num}" th:if="${page_Num==pageinfo.pageNum}" ></a>
-                        <a href="#" th:text="${page_Num}"  th:if="${page_Num!=pageinfo.pageNum}"  th:href="@{/(pn=${page_Num}) }"></a>
+                        <a href="#" th:text="${page_Num}"  th:if="${page_Num!=pageinfo.pageNum}"  th:href="@{/(pn=${page_Num},tag=${tag1}) }"></a>
                     </li>
 
                     <!-- 是否有下一页，没有就显示禁用状态-->
-                    <li th:class="${!pageinfo.hasNextPage}?'disabled' :''" ><a href="/"  th:href="@{/(pn=${pageinfo.pages}) }">尾页</a></li>
+                    <li th:class="${!pageinfo.hasNextPage}?'disabled' :''" ><a href="/"  th:href="@{/(pn=${pageinfo.pages},tag=${tag1}) }">尾页</a></li>
                     <li th:class="${!pageinfo.hasNextPage}?'disabled' :''">
-                        <a href="#" aria-label="Next" th:href="@{/(pn=${(pageinfo.pageNum)+1}) }">
+                        <a href="#" aria-label="Next" th:href="@{/(pn=${(pageinfo.pageNum)+1},tag=${tag1}) }">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>

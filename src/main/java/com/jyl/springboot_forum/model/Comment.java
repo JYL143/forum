@@ -6,7 +6,7 @@ import lombok.Data;
 public class Comment {
 
     private Long id;
-    private Long parentId;          //问题ID
+    private Long parentId;          //父类id，一级就是指问题id，二级就是指回复id
     private Integer type;           //父类类型，1级评论还是二级评论
     private Long commentator;       //评论人id
     private Long gmtCreate;         //创建时间

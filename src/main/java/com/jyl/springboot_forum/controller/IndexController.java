@@ -27,15 +27,24 @@ public class IndexController {
      * @return
      */
     @GetMapping("/")
-    public String index( Model model, @RequestParam(value = "pn",defaultValue = "1")Integer pn){
+    public String index( Model model, @RequestParam(value = "pn",defaultValue = "1")Integer pn,
+                         @RequestParam(name = "tag", required = false) String tag){
 
+        if (tag==null){
+            PageHelper.startPage(pn, 5);             //一页几条数据
+            List<Question> questions=questionMapper.list();
+            PageInfo page=new PageInfo(questions,5); //分页条显示几个页
+            model.addAttribute("pageinfo",page);
+            return "index";
+        }else {  //查询指定标签问题
+            PageHelper.startPage(pn, 5);
+            List<Question> questions=questionMapper.listbytag(tag);
+            PageInfo page=new PageInfo(questions,5);
+            model.addAttribute("pageinfo",page);
+            model.addAttribute("tag1",tag);
+            return "tag";
+        }
 
-        PageHelper.startPage(pn, 5);             //一页几条数据
-         List<Question> questions=questionMapper.list();
-        PageInfo page=new PageInfo(questions,5); //分页条显示几个页
-        model.addAttribute("pageinfo",page);
-
-        return "index";
     }
 
 

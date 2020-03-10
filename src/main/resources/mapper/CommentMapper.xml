@@ -41,5 +41,15 @@
            group by comment.gmt_create  desc
     </select>
 
+    <!-- 二级评论后 给一级评论添加回复-->
+    <update id="addCommentCount" parameterType="long">
+        update comment set comment_count = comment_count+1
+         where  id=#{parentId}
+    </update>
 
+    <!-- 增加点赞数-->
+    <update id="addlike" parameterType="long">
+        update comment set like_count = like_count+1
+         where  id=#{parentId}
+    </update>
 </mapper>

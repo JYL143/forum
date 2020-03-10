@@ -29,4 +29,10 @@ public interface QuestionMapper {
 
     //增加回复数
     void addCommentCount(Long parentId);
+
+    //按标签数组 查询对应相关问题
+    List<Question> selectRelated(Question question);
+
+    //按标签差问题列表
+    List<Question> listbytag(String tag);
 }

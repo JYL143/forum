@@ -66,8 +66,7 @@
                 <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <span class="question-tag" th:each="tag : ${question.tag.split(',')}">
-                        <a th:href="@{/(page=1,tag=${tag})}"
-                           th:text="${tag}" class="community-tag"></a>
+                        <a th:href="@{/(tag=${tag})}" th:text="${tag}" class="community-tag"></a>
                     </span>
                 </div>
 
@@ -102,11 +101,12 @@
                             </h5>
                             <div th:text="${comment.content}"></div>
                             <div class="menu">
-                                  <span  class="comment-icon">
-                                    <span class="glyphicon glyphicon-thumbs-up icon"></span>
+                                <!--点赞文字图标-->
+                                <span  class="comment-icon">
+                                    <span class="glyphicon glyphicon-thumbs-up icon" th:data-id="${comment.id}" onclick="addlike(this)"></span>
                                     <span th:text="${comment.likeCount}"></span>
                                 </span>
-
+                                <!--回复文字图标-->
                                 <span th:data-id="${comment.id}" onclick="collapseComments(this)" class="comment-icon" style="margin-left: 4px">
                                     <span class="glyphicon glyphicon-comment"></span>
                                     <span th:text="${comment.commentCount}"></span>
@@ -115,16 +115,17 @@
                                       th:text="${#dates.format(comment.gmtCreate,'yyyy-MM-dd  HH:mm')}"></span>
                             </div>
                             <!--二级评论-->
-<!--                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"-->
-<!--                                 th:id="${'comment-'+comment.id}">-->
-<!--                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">-->
-<!--                                    <input type="text" class="form-control" placeholder="评论一下……"-->
-<!--                                           th:id="${'input-'+comment.id}">-->
-<!--                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"-->
-<!--                                            th:data-id="${comment.id}">评论-->
-<!--                                    </button>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 collapse sub-comments"
+                                 th:id="${'comment-'+comment.id}">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                    <input type="text" class="form-control" placeholder="评论一下……"
+                                           th:id="${'input-'+comment.id}">
+                                    <button type="button" class="btn btn-success pull-right" onclick="comment(this)"
+                                            th:data-id="${comment.id}">评论
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -182,11 +183,11 @@
             <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <h4>相关问题</h4>
-<!--                <ul class="question-related">-->
-<!--                    <li th:each="related : ${relatedQuestions}">-->
-<!--                        <a th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>-->
-<!--                    </li>-->
-<!--                </ul>-->
+                <ul class="question-related">
+                    <li th:each="related : ${relatedQuestions}">
+                        <a th:href="@{'/question/'+ ${related.id}}" th:text="${related.title}"></a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
@@ -201,13 +202,20 @@
         var content = $("#comment_content").val();      //获取回复内容
         comment2target(questionId, 1, content);
     }
+    /**
+     * 二级评论确认评论
+     */
+    function comment(e) {
+        var commentId = e.getAttribute("data-id");
+        var content = $("#input-" + commentId).val();
+        comment2target(commentId, 2, content);
+    }
 
     function comment2target(targetId, type, content) {
         if (!content) {
             alert("不能回复空内容~~~");
             return;
         }
-
         $.ajax({
             type: "POST",
             url: "/comment",
@@ -224,10 +232,115 @@
                 } else {
                     alert("未登录，不能回复，请先登录！")
                 }
-
             }
 
         });
+    }
+
+
+    /**
+     * 展开二级评论
+     */
+    function collapseComments(e) {
+        var id = e.getAttribute("data-id");
+        var comments = $("#comment-" + id);
+
+        // 获取一下二级评论的展开状态
+        var collapse = e.getAttribute("data-collapse");  //查看这个里面有没有值 有就折叠二级评论，没有就展开 这个属性是下面添加的
+        if (collapse) {
+            // 折叠二级评论
+            comments.removeClass("in");
+            e.removeAttribute("data-collapse");
+            e.classList.remove("active");
+        } else {
+            var subCommentContainer = $("#comment-" + id);
+            if (subCommentContainer.children().length != 1) {
+                //展开二级评论
+                comments.addClass("in");
+                // 标记二级评论展开状态
+                e.setAttribute("data-collapse", "in");
+                e.classList.add("active");  //给回复图标变亮
+            } else {
+                $.getJSON("/comment/" + id, function (data) {
+                    $.each(data.data.reverse(), function (index, comment) {
+                        var mediaLeftElement = $("<div/>", {
+                            "class": "media-left"
+                        }).append($("<img/>", {
+                            "class": "media-object img-rounded",
+                            "src": comment.user.avatarUrl
+                        }));
+
+                        var mediaBodyElement = $("<div/>", {
+                            "class": "media-body"
+                        }).append($("<h5/>", {
+                            "class": "media-heading",
+                            "html": comment.user.name
+                        })).append($("<div/>", {
+                            "html": comment.content
+                        })).append($("<div/>", {
+                            "class": "menu"
+                        }).append($("<span/>", {
+                            "class": "pull-right",
+                            "html": moment(comment.gmtCreate).format('YYYY-MM-DD')
+                        })));
+
+                        var mediaElement = $("<div/>", {
+                            "class": "media"
+                        }).append(mediaLeftElement).append(mediaBodyElement);
+
+                        var commentElement = $("<div/>", {
+                            "class": "col-lg-12 col-md-12 col-sm-12 col-xs-12 comments"
+                        }).append(mediaElement);
+
+                        subCommentContainer.prepend(commentElement);
+                    });
+                    //展开二级评论
+                    comments.addClass("in");
+                    // 标记二级评论展开状态
+                    e.setAttribute("data-collapse", "in");
+                    e.classList.add("active");
+                });
+            }
+        }
+    }
+
+    /**
+     * 增加点赞数
+     */
+    function addlike(e) {
+        var parentId = e.getAttribute("data-id");
+
+        $.ajax({
+            type: "POST",
+            url: "/addlike?parentId="+parentId,
+            success: function (response) {
+                if (response.code == 200) {
+                    window.location.reload();
+                } else {
+                    alert("未登录，不能点赞，请先登录！");
+                }
+            }
+
+        });
+
+    }
+
+
+    //暂时没用到
+    function showSelectTag() {
+        $("#select-tag").show();
+    }
+
+    function selectTag(e) {
+        var value = e.getAttribute("data-tag");
+        var previous = $("#tag").val();
+        if (previous.indexOf(value) == -1) {
+            if (previous) {
+                $("#tag").val(previous + ',' + value);
+            } else {
+                $("#tag").val(value);
+            }
+        }
     }
 </script>
 </body>

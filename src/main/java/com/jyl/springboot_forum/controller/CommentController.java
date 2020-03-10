@@ -44,12 +44,34 @@ public class CommentController {
         comment.setLikeCount(0L); //点赞数
         comment.setCommentCount(0);   //该回复的回复数
         commentMapper.insert(comment);  //添加回复
-        questionMapper.addCommentCount(comment.getParentId());//添加回复数
+        if (comment.getType()==1){ //一级评论在问题表增加回复数
+            questionMapper.addCommentCount(comment.getParentId());//添加回复数  参数是父类id，一级就是指问题id，二级就是指回复id
+        }else{ //2级评论在回复表增加回复数
+            commentMapper.addCommentCount(comment.getParentId());//添加回复数  参数是父类id，一级就是指问题id，二级就是指回复id
+        }
+        return ResultDTO.okOf();
+    }
+
+
+    //增加点赞数
+    @ResponseBody
+    @PostMapping("/addlike")
+    public Object addlike(Long parentId,HttpServletRequest request) {
+
+        User user= (User) request.getSession().getAttribute("user");
+        if (user ==null){
+            return ResultDTO.errorOf(2002,"未登录，请先登录！");
+        }
+
+        commentMapper.addlike(parentId);//增加点赞数
+
 
         return ResultDTO.okOf();
     }
 
-    //显示回复列表
+
+
+    //显示回复列表，暂时没用到，问题控制类直接调用了
     @ResponseBody
     @GetMapping("/comment/{id}")
     public ResultDTO<List<Comment>> comments(@PathVariable(name = "id") Long id) {

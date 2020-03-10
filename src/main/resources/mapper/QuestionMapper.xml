@@ -65,9 +65,25 @@
          where  id=#{id}
     </update>
 
-    <!-- 增加阅读数-->
+    <!-- 增加回复-->
     <update id="addCommentCount" parameterType="long">
         update question set comment_count = comment_count+1
          where  id=#{parentId}
     </update>
+
+    <!--按标签数组 查询对应相关问题 查询最多前面20个-->
+    <select id="selectRelated" parameterType="question" resultType="question">
+           select * from question
+           where tag regexp #{tag} and id!=#{id}
+           limit 15
+    </select>
+
+    <!--按标签差问题列表-->
+    <select id="listbytag" resultMap="QuestionMap" parameterType="string">
+           select * from question
+           left join user on user.id=question.creator
+
+           where tag like concat('%',#{tag},'%')
+    </select>
+
 </mapper>
