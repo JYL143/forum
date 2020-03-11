@@ -2,6 +2,7 @@ package com.jyl.springboot_forum.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyl.springboot_forum.mapper.NotificationMapper;
 import com.jyl.springboot_forum.mapper.QuestionMapper;
 
 import com.jyl.springboot_forum.model.Question;
@@ -21,6 +22,9 @@ public class IndexController {
 
     @Autowired
     private QuestionMapper questionMapper;
+
+
+
     /**
      * 主页面
      * cookie持久化登录
@@ -29,6 +33,7 @@ public class IndexController {
     @GetMapping("/")
     public String index( Model model, @RequestParam(value = "pn",defaultValue = "1")Integer pn,
                          @RequestParam(name = "tag", required = false) String tag){
+
 
         if (tag==null){
             PageHelper.startPage(pn, 5);             //一页几条数据

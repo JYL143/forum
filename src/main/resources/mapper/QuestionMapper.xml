@@ -82,8 +82,13 @@
     <select id="listbytag" resultMap="QuestionMap" parameterType="string">
            select * from question
            left join user on user.id=question.creator
-
            where tag like concat('%',#{tag},'%')
+    </select>
+
+    <!--根据问题id来查询这个问题的发布人id-->
+    <select id="getUserIdByParentId" parameterType="long" resultType="question">
+           select * from question
+           where  id=#{parentId}
     </select>
 
 </mapper>

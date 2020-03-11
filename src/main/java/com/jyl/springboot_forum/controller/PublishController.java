@@ -1,10 +1,12 @@
 package com.jyl.springboot_forum.controller;
 
 
+import com.jyl.springboot_forum.cache.TagCache;
 import com.jyl.springboot_forum.mapper.QuestionMapper;
 
 import com.jyl.springboot_forum.model.Question;
 import com.jyl.springboot_forum.model.User;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -37,12 +39,14 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());  //查出id然后放到隐藏域里 然后点击发布问题就根据有没有id来做添加问题还是更新问题
+        model.addAttribute("tags", TagCache.get());  //将标签库数据放进去
 
         return "publish";
     }
 
     @GetMapping("/publish")
-    public String publish() {
+    public String publish(Model model) {
+        model.addAttribute("tags", TagCache.get());  //将标签库数据放进去
         return "publish";
     }
 
@@ -60,7 +64,7 @@ public class PublishController {
         model.addAttribute("title", title);
         model.addAttribute("description", description);
         model.addAttribute("tag", tag);
-
+        model.addAttribute("tags", TagCache.get());  //将标签库数据放进去
 
         if (title ==null || title =="") {
             model.addAttribute("error", "标题不能为空");
@@ -75,6 +79,11 @@ public class PublishController {
             return "publish";
         }
 
+        String invalid = TagCache.filterInvalid(tag);  //传入标签，检测是否输入非法标签
+        if (StringUtils.isNotBlank(invalid)) { //如果不为空，说明里面存在识别不了的标签
+            model.addAttribute("error", "输入非法标签:" + invalid);
+            return "publish";
+        }
         User user = (User) request.getSession().getAttribute("user");
         if (user==null){
             model.addAttribute("error","用户未登录");

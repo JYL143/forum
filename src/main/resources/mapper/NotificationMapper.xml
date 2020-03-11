@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.jyl.springboot_forum.mapper.NotificationMapper">
+
+    <!--点击登录，登录成功添加user信息-->
+    <insert id="insert" parameterType="notification">
+      insert into notification(notifier,receiver,outerid,gmt_create,type,status,notifier_name,outer_title)
+      values (#{notifier},#{receiver},#{outerid},#{gmtCreate},#{type},#{status},#{notifierName},#{outerTitle})
+    </insert>
+
+    <!--查询该用户有几个未读的回复-->
+    <select id="getnumber" parameterType="int" resultType="long">
+           select count(*) from notification
+           where  receiver=#{id}
+    </select>
+
+    <!--查询这个用户的最新回复-->
+    <select id="list2" resultType="notification" parameterType="int">
+           select * from notification
+           where receiver=#{id}
+    </select>
+
+</mapper>

@@ -47,4 +47,23 @@ public class QuestionController {
 
         return "question";
     }
+
+    //查看问题详情  加浏览数,这个先查二级评论对应的一级评论 在对应的问题id
+    @GetMapping("/notification/{id}")
+    public String notification(@PathVariable(name = "id") Integer id, Model model) {
+
+        Comment comment=commentMapper.getUserIdByParentId(Long.valueOf(id));  //查询评论对应的问题id
+        Integer questionid=comment.getParentId().intValue();                 //long转int类型
+
+        questionMapper.addviewCount(questionid); //增加阅读数
+        Question question=questionMapper.getById(questionid); //查询问题
+        List<Question> relatedQuestions=questionService.selectRelated(question); //按标签数组查询相关问题，先将标签字符串的，改成|,以供数据库正则查询
+        List<Comment> comments = commentMapper.listByTargetId1(comment.getParentId());//查询一级回复
+
+        model.addAttribute("question",question);
+        model.addAttribute("comments", comments);
+        model.addAttribute("relatedQuestions", relatedQuestions);
+
+        return "question";
+    }
 }

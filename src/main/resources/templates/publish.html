@@ -24,18 +24,43 @@
                     <input type="hidden" name="id" th:value="${id}">
                     <div class="form-group">
                         <label for="title">问题标题（简单扼要）:</label>
-                        <input type="text"  th:value="${title}" class="form-control" id="title" name="title" placeholder="问题标题……">
+                        <input type="text"  th:value="${title}" class="form-control" autocomplete="off"  id="title" name="title" placeholder="问题标题……">
                     </div>
                     <div class="form-group">
                         <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                        <textarea name="description" th:text="${description}" id="description" class="form-control" cols="30" rows="10"></textarea>
+                        <textarea name="description" th:text="${description}" id="description" class="form-control" autocomplete="off"  cols="30" rows="10"></textarea>
                     </div>
 
                     <div class="form-group">
                         <label for="tag">添加标签:</label>
-                        <input type="text" class="form-control"  th:value="${tag}"id="tag" name="tag" placeholder="输入标签，以英文，号分隔">
-
+                        <input type="text" class="form-control"  th:value="${tag}"id="tag"  autocomplete="off"  name="tag"
+                               onclick="showSelectTag()" placeholder="输入标签，以英文，号分隔">
+                        <!--标签库-->
+                        <div id="select-tag" class="publish-tag-tab">
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" th:each="selectCategory,selectCategoryStat: ${tags}"
+                                    th:class="${selectCategoryStat.first ? 'active':''}">
+                                    <a th:href="${'#'+selectCategory.categoryName}" aria-controls="home" role="tab"
+                                       data-toggle="tab" th:text="${selectCategory.categoryName}"></a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div role="tabpanel" th:id="${selectCategory.categoryName}"
+                                     th:each="selectCategory: ${tags}"
+                                     th:class="${selectCategoryStat.first ? 'active tab-pane':'tab-pane'}">
+                                <span>
+                                    <span th:each="selectTag: ${selectCategory.tags}">
+                                    <span class="community-tag" onclick="selectTag(this)"
+                                          th:data-tag="${selectTag}"
+                                          th:text="${' '+selectTag}">
+                                    </span>
+                                </span>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
                     <div class="container-fluid main ">
                         <div class="row">
                             <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
@@ -59,6 +84,30 @@
         </div>
     </div>
 
+<script>
 
+    //显示标签库
+    function showSelectTag() {
+        $("#select-tag").show();
+    }
+
+    //添加标签到输入框
+    function selectTag(e) {
+
+        var value = e.getAttribute("data-tag");
+        var previous = $("#tag").val();
+
+        if (previous.indexOf(value) == -1) {   //如果这个标签还没加上去才进行添加操作
+            if (previous) { //如果这个变量不为空就先加，号在加标签
+                $("#tag").val(previous + ',' + value);
+            } else {       //如果为空就直接加这个标签
+                $("#tag").val(value);
+            }
+        }
+
+    }
+
+
+</script>
 </body>
 </html>

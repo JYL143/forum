@@ -35,4 +35,7 @@ public interface QuestionMapper {
 
     //按标签差问题列表
     List<Question> listbytag(String tag);
+
+    //根据问题id来查询这个问题的发布人id
+    Question getUserIdByParentId(Long parentId);
 }

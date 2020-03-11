@@ -2,6 +2,7 @@ package com.jyl.springboot_forum.controller;
 
 import com.jyl.springboot_forum.dto.AccessTokenDTO;
 import com.jyl.springboot_forum.dto.GithubUser;
+import com.jyl.springboot_forum.mapper.NotificationMapper;
 import com.jyl.springboot_forum.mapper.UserMapper;
 import com.jyl.springboot_forum.model.User;
 import com.jyl.springboot_forum.provider.GithubProvider;
@@ -36,6 +37,7 @@ public class AuthorizeController {
 
     @Autowired
     private UserService userService;
+
 
 
     /**

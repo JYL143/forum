@@ -18,4 +18,7 @@ public interface CommentMapper {
 
     //增加点赞数
     void addlike(Long parentId);
+
+    //根据二级评论id来查询这个一级评论的发布人id
+    Comment getUserIdByParentId(Long parentId);
 }

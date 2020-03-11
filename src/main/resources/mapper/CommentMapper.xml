@@ -52,4 +52,12 @@
         update comment set like_count = like_count+1
          where  id=#{parentId}
     </update>
+
+
+    <!--根据二级评论id来查询这个一级评论的发布人id-->
+    <select id="getUserIdByParentId" parameterType="long" resultType="comment">
+           select * from comment
+           where  id=#{parentId}
+    </select>
+
 </mapper>

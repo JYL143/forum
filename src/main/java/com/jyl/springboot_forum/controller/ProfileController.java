@@ -3,8 +3,10 @@ package com.jyl.springboot_forum.controller;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.jyl.springboot_forum.mapper.NotificationMapper;
 import com.jyl.springboot_forum.mapper.QuestionMapper;
 
+import com.jyl.springboot_forum.model.Notification;
 import com.jyl.springboot_forum.model.Question;
 import com.jyl.springboot_forum.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,8 @@ import java.util.List;
 @Controller
 public class ProfileController {
 
-//    @Autowired
-//    private NotificationService notificationService;
+    @Autowired
+    private NotificationMapper notificationMapper;
 
 
     @Autowired
@@ -40,22 +42,31 @@ public class ProfileController {
             return "redirect:/";
         }
 
+        Long unreadCount=notificationMapper.getnumber(user.getId());//查询该用户有几个未读的回复
+        request.getSession().setAttribute("unreadCount",unreadCount);
+
         if ("questions".equals(action)) {
             model.addAttribute("section", "questions");
             model.addAttribute("sectionName", "我的提问");
-//            PaginationDTO paginationDTO = questionService.list(user.getId(), page, size);
-////            model.addAttribute("pagination", paginationDTO);
+
+            PageHelper.startPage(pn, 5);
+            List<Question> questions=questionMapper.list2(user.getId());  //查询这个用户的所有问题
+            PageInfo page=new PageInfo(questions,5);
+            model.addAttribute("pageinfo",page);
+
         } else if ("replies".equals(action)) {
-//            PaginationDTO paginationDTO = notificationService.list(user.getId(), page, size);
-//            model.addAttribute("pagination", paginationDTO);
+
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "最新回复");
+
+            PageHelper.startPage(pn, 5);
+            List<Notification> notifications=notificationMapper.list2(user.getId());  //查询这个用户的最新回复
+            PageInfo page=new PageInfo(notifications,5);
+            model.addAttribute("pageinfo",page);
+
         }
 
-        PageHelper.startPage(pn, 5);             //一页几条数据
-        List<Question> questions=questionMapper.list2(user.getId());  //查询这个用户的所有问题
-        PageInfo page=new PageInfo(questions,5); //分页条显示几个页
-        model.addAttribute("pageinfo",page);
+
         return "profile";
     }
 }
