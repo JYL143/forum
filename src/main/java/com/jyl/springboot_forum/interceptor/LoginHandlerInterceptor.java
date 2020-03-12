@@ -1,5 +1,6 @@
 package com.jyl.springboot_forum.interceptor;
 
+import com.jyl.springboot_forum.mapper.NotificationMapper;
 import com.jyl.springboot_forum.mapper.UserMapper;
 import com.jyl.springboot_forum.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;  //这里使用这个注解需要加Component注解,mvc配置类也不能直接new这个类 也要注入
 
+    @Autowired
+    private NotificationMapper notificationMapper;
+
     //目标方法执行之前
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object o) throws Exception {
@@ -35,6 +39,10 @@ public class LoginHandlerInterceptor implements HandlerInterceptor {
                     if (user!=null){
                         request.getSession().setAttribute("user",user);
                     }
+
+                    Long unreadCount=notificationMapper.getnumber(user.getId());//查询该用户有几个未读的回复
+                    request.getSession().setAttribute("unreadCount",unreadCount);
+
                     break;
                 }
             }
