@@ -8,6 +8,7 @@
     <link rel="stylesheet"href="/css/community.css" >
     <script src="/js/jquery-3.4.1.min.js" ></script>
     <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <link rel="icon" href="/images/logo.jpg" type="image/x-icon"/>
 </head>
 <body>
     <!--头部-->
@@ -72,7 +73,29 @@
             </div>
         </div>
         <div class="col-lg-3 col-md-12 col-sm12 col-xs-12">
-            <h3>热门话题</h3>
+            <div th:insert="~{notice :: notice}"></div>
+
+                <!--相关问题-->
+                <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h4>热门标签</h4>
+                    <a  th:href="@{/(tag='java')}" th:text="java" class="community-tag"></a>
+                    <a  th:href="@{/(tag='ide')}" th:text="ide" class="community-tag"></a>
+                    <a  th:href="@{/(tag='spring')}" th:text="spring" class="community-tag"></a>
+                    <a  th:href="@{/(tag='springmvc')}" th:text="springmvc" class="community-tag"></a>
+                    <a  th:href="@{/(tag='mybatis')}" th:text="mybatis" class="community-tag"></a>
+                    <a  th:href="@{/(tag='springboot')}" th:text="springboot" class="community-tag"></a>
+                    <a  th:href="@{/(tag='springcloud')}" th:text="springcloud" class="community-tag"></a>
+                    <a  th:href="@{/(tag='vim')}" th:text="vim" class="community-tag"></a>
+                    <a  th:href="@{/(tag='css')}" th:text="css" class="community-tag"></a>
+                    <a  th:href="@{/(tag='python')}" th:text="python" class="community-tag"></a>
+                </div>
+            <hr class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 side">
+                <h4>云服务器推荐</h4>
+                <img class="img-thumbnail question-wechat" src="/images/official-account1.png">
+            </div>
+
 
         </div>
     </div>

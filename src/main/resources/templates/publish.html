@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>发布--云米社区</title>
     <head th:insert="~{import :: head}"></head>
-    <head th:insert="~{import :: markdown}"></head>
+
 </head>
 <body >
 
@@ -27,22 +27,7 @@
                         <label for="description">问题补充 (必填，请参照右侧提示):</label>
                         <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
                     </div>
-<!--                    &lt;!&ndash;富文本编辑器，需要导入js和js中的lib的js 还有两个css 一些图标 font字体&ndash;&gt;-->
-<!--                    <script type="text/javascript">-->
-<!--                        $(function () {-->
-<!--                            var editor = editormd("question-editor", {-->
-<!--                                width: "100%",-->
-<!--                                height: 350,-->
-<!--                                path: "/js/lib/",-->
-<!--                                delay: 0,-->
-<!--                                watch: false,-->
-<!--                                placeholder: "请输入问题描述",-->
-<!--                                imageUpload: true,-->
-<!--                                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],-->
-<!--                                imageUploadURL: "/file/upload",-->
-<!--                            });-->
-<!--                        });-->
-<!--                    </script>-->
+
 
                     <div class="form-group">
                         <label for="tag">添加标签:</label>
