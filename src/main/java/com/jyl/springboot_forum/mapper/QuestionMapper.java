@@ -38,4 +38,7 @@ public interface QuestionMapper {
 
     //根据问题id来查询这个问题的发布人id
     Question getUserIdByParentId(Long parentId);
+
+    //搜索功能
+    List<Question> searchTitle(String search);
 }

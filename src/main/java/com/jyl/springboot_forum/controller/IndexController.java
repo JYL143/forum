@@ -28,10 +28,12 @@ public class IndexController {
     /**
      * 主页面
      * cookie持久化登录
+     * 标签分类查询
      * @return
      */
     @GetMapping("/")
-    public String index( Model model, @RequestParam(value = "pn",defaultValue = "1")Integer pn,
+    public String index( Model model,
+                         @RequestParam(value = "pn",defaultValue = "1")Integer pn,
                          @RequestParam(name = "tag", required = false) String tag){
 
 
@@ -52,5 +54,19 @@ public class IndexController {
 
     }
 
-
+    /**
+     * 搜索功能
+     * @return
+     */
+    @GetMapping("/search")
+    public String search( Model model,
+                          @RequestParam(value = "pn",defaultValue = "1")Integer pn,
+                          @RequestParam(name = "search", required = false) String search){
+        model.addAttribute("search",search);
+        PageHelper.startPage(pn, 5);
+        List<Question> questions=questionMapper.searchTitle(search);
+        PageInfo page=new PageInfo(questions,5);
+        model.addAttribute("pageinfo",page);
+        return "search";
+    }
 }

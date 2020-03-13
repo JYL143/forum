@@ -91,4 +91,11 @@
            where  id=#{parentId}
     </select>
 
+    <!--按标签差问题列表-->
+    <select id="searchTitle" resultMap="QuestionMap" parameterType="string">
+           select * from question
+           left join user on user.id=question.creator
+           where title like concat('%',#{search},'%')
+    </select>
+
 </mapper>

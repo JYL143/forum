@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -43,26 +44,27 @@ public class QuestionController {
     //查看问题详情  加浏览数,更新回复数，更改通知状态
     @Transactional //开启事务
     @GetMapping("/question/{id}")
-    public String question(@PathVariable(name = "id") Integer id, Model model, HttpServletRequest request) {
+    public String question(@PathVariable(name = "id") Integer id, Model model, HttpServletRequest request,
+                           @RequestParam(name = "notificationid", required = false) String notificationid) {
 
-        Integer id2=notificationMapper.getouterid(id).intValue();//查询主键对应的outerid
-
-        questionMapper.addviewCount(id2); //增加阅读数
-        Question question=questionMapper.getById(id2); //查询问题
+        questionMapper.addviewCount(id); //增加阅读数
+        Question question=questionMapper.getById(id); //查询问题
         List<Question> relatedQuestions=questionService.selectRelated(question); //按标签数组查询相关问题，先将标签字符串的，改成|,以供数据库正则查询
-        List<Comment> comments = commentMapper.listByTargetId1(Long.valueOf(id2));//查询一级回复
+        List<Comment> comments = commentMapper.listByTargetId1(Long.valueOf(id));//查询一级回复
 
-        notificationMapper.updateStatus(id); //将未读改成已读
 
         model.addAttribute("question",question);
         model.addAttribute("comments", comments);
         model.addAttribute("relatedQuestions", relatedQuestions);
 
-        //查询该用户有几个未读的回复
-        User user = (User) request.getSession().getAttribute("user");
-        Long unreadCount=notificationMapper.getnumber(user.getId());
-        request.getSession().setAttribute("unreadCount",unreadCount);
+        if (notificationid!=null){
 
+            notificationMapper.updateStatus(Integer.valueOf(notificationid)); //将未读改成已读
+            //查询该用户有几个未读的回复
+            User user = (User) request.getSession().getAttribute("user");
+            Long unreadCount=notificationMapper.getnumber(user.getId());
+            request.getSession().setAttribute("unreadCount",unreadCount);
+        }
         return "question";
     }
 

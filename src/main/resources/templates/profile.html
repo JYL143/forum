@@ -46,10 +46,11 @@
                 <div class="media" th:each="pageinfo:${pageinfo.list}" >
                     <div class="media-body">
                         <p class="media-heading">
+                            <span th:text="${#dates.format(pageinfo.gmtCreate,'MM-dd HH:mm')}"></span>
                             <span th:text="${pageinfo.notifierName +' ' + '回复了您的' +' '}"></span>
                             <span th:text="${pageinfo.type==0?'问题':'评论'}"></span>
 
-                            <a  th:href="@{'/question/'+ ${pageinfo.id}}" th:text="${pageinfo.outerTitle}" th:if="${pageinfo.type==0}"></a>
+                            <a  th:href="@{'/question/'+ ${pageinfo.id}(notificationid=${pageinfo.id})}" th:text="${pageinfo.outerTitle}" th:if="${pageinfo.type==0}"></a>
                             <a  th:href="@{'/notification/'+ ${pageinfo.id}}" th:text="${pageinfo.outerTitle}" th:if="${pageinfo.type==1}"></a>
                             <span class="label label-danger" th:if="${pageinfo.status == 0}">未读</span>
                         </p>
@@ -104,5 +105,6 @@
         </div>
     </div>
 </div>
+<div th:insert="~{footer :: foot}"></div>
 </body>
 </html>

@@ -34,7 +34,7 @@ public class GithubProvider {
             return token;
         } catch (Exception e) {
 //            log.error("getAccessToken error,{}", accessTokenDTO, e);
-             System.out.println("getAccessToken error,{}");
+             System.out.println("getAccessToken方法失败");
               
         }
         return null;
@@ -54,7 +54,7 @@ public class GithubProvider {
             return githubUser;
         } catch (Exception e) {
            // log.error("getUser error,{}", accessToken, e);
-            System.out.println("getUser error,{}");
+            System.out.println("登录失败，github密码登录延迟，晚点登");
         }
         return null;
     }

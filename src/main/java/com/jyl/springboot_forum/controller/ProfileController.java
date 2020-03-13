@@ -59,7 +59,7 @@ public class ProfileController {
             model.addAttribute("section", "replies");
             model.addAttribute("sectionName", "最新回复");
 
-            PageHelper.startPage(pn, 5);
+            PageHelper.startPage(pn, 9);
             List<Notification> notifications=notificationMapper.list2(user.getId());  //查询这个用户的最新回复
             PageInfo page=new PageInfo(notifications,5);
             model.addAttribute("pageinfo",page);

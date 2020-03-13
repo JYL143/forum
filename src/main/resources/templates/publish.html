@@ -3,11 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>发布--云米社区</title>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet"href="/css/bootstrap-theme.css">
-    <link rel="stylesheet"href="/css/community.css">
-    <script src="/js/jquery-3.4.1.min.js" ></script>
-    <script src="/js/bootstrap.min.js" type="application/javascript"></script>
+    <head th:insert="~{import :: head}"></head>
+    <head th:insert="~{import :: markdown}"></head>
 </head>
 <body >
 
@@ -26,10 +23,26 @@
                         <label for="title">问题标题（简单扼要）:</label>
                         <input type="text"  th:value="${title}" class="form-control" autocomplete="off"  id="title" name="title" placeholder="问题标题……">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" id="question-editor">
                         <label for="description">问题补充 (必填，请参照右侧提示):</label>
-                        <textarea name="description" th:text="${description}" id="description" class="form-control" autocomplete="off"  cols="30" rows="10"></textarea>
+                        <textarea name="description" id="description" th:text="${description}" class="form-control" cols="30" rows="10"></textarea>
                     </div>
+<!--                    &lt;!&ndash;富文本编辑器，需要导入js和js中的lib的js 还有两个css 一些图标 font字体&ndash;&gt;-->
+<!--                    <script type="text/javascript">-->
+<!--                        $(function () {-->
+<!--                            var editor = editormd("question-editor", {-->
+<!--                                width: "100%",-->
+<!--                                height: 350,-->
+<!--                                path: "/js/lib/",-->
+<!--                                delay: 0,-->
+<!--                                watch: false,-->
+<!--                                placeholder: "请输入问题描述",-->
+<!--                                imageUpload: true,-->
+<!--                                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],-->
+<!--                                imageUploadURL: "/file/upload",-->
+<!--                            });-->
+<!--                        });-->
+<!--                    </script>-->
 
                     <div class="form-group">
                         <label for="tag">添加标签:</label>
@@ -83,7 +96,7 @@
             </div>
         </div>
     </div>
-
+    <div th:insert="~{footer :: foot}"></div>
 <script>
 
     //显示标签库
